@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COZY 줄눈</title>
+    <meta
+      name="description"
+      content="화이트 기반의 줄눈 시공 홈페이지"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: #ffffff;
+        color: #111111;
+        font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        width: 100%;
+      }
+
+      .wrap {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .header {
+        padding: 24px 0;
+        border-bottom: 1px solid #e9e9e9;
+        background: rgba(255, 255, 255, 0.96);
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .brand {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+
+      .nav {
+        display: flex;
+        gap: 28px;
+        color: #666666;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 10px 0 24px;
+      }
+
+      .hero .wrap {
+        max-width: 100%;
+        padding: 0 12px;
+      }
+
+      .hero-slider {
+        position: relative;
+        width: 100%;
+        height: min(82vh, 880px);
+        min-height: 640px;
+        overflow: hidden;
+        background: #f5f5f5;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+        pointer-events: none;
+      }
+
+      .slide.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.45) 0%,
+          rgba(0, 0, 0, 0.22) 36%,
+          rgba(0, 0, 0, 0.06) 60%,
+          rgba(0, 0, 0, 0.04) 100%
+        );
+      }
+
+      .copy {
+        position: absolute;
+        top: 50%;
+        left: 7%;
+        transform: translateY(-50%);
+        width: min(520px, 40%);
+        color: #ffffff;
+      }
+
+      .copy h1,
+      .copy h2 {
+        margin: 0;
+        font-size: clamp(30px, 2.7vw, 43px);
+        line-height: 1.22;
+        font-weight: 700;
+      }
+
+      .copy p {
+        margin: 18px 0 0;
+        font-size: clamp(11px, 0.9vw, 14px);
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.92);
+        white-space: pre-line;
+      }
+
+      .slider-ui {
+        position: absolute;
+        left: 7%;
+        right: 7%;
+        bottom: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        z-index: 3;
+      }
+
+      .dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .dot {
+        width: 44px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.35);
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .dot.active {
+        background: #ffffff;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+      }
+
+      .control-btn {
+        width: 48px;
+        height: 48px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .section {
+        padding: 90px 0;
+        border-bottom: 1px solid #efefef;
+      }
+
+      .effect-section {
+        padding: 84px 0 90px;
+        border-bottom: 1px solid #efefef;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.24em;
+        color: #8d8d8d;
+      }
+
+      .section h2 {
+        margin: 18px 0 30px;
+        font-size: clamp(32px, 3vw, 42px);
+        line-height: 1.2;
+        font-weight: 700;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+      }
+
+      .two-col p,
+      .feature-card p,
+      .contact-box p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.9;
+        color: #555555;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .effect-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .effect-card {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #e5e5e5;
+        background: #000000;
+      }
+
+      .effect-card img {
+        width: 100%;
+        height: 340px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .effect-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+      }
+
+      .effect-copy {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 24px;
+        color: #ffffff;
+      }
+
+      .effect-copy h3 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        line-height: 1.35;
+        font-weight: 700;
+      }
+
+      .effect-copy p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.95);
+        white-space: pre-line;
+      }
+
+      .feature-card,
+      .contact-box {
+        border: 1px solid #e5e5e5;
+        padding: 28px;
+        background: #ffffff;
+      }
+
+      .feature-card strong {
+        display: block;
+        margin: 14px 0 12px;
+        font-size: 28px;
+        line-height: 1.3;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 18px;
+      }
+
+      .gallery-grid div {
+        border: 1px solid #dddddd;
+        background: #fafafa;
+        min-height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999999;
+        font-size: 14px;
+        letter-spacing: 0.22em;
+      }
+
+      .gallery-grid .wide {
+        grid-column: span 6;
+      }
+
+      .gallery-grid .small {
+        grid-column: span 4;
+      }
+
+      .material-grid,
+      .review-grid,
+      .stats-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .material-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .review-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .material-card,
+      .review-card,
+      .stat-card {
+        border: 1px solid #e5e5e5;
+        background: #ffffff;
+      }
+
+      .material-card,
+      .review-card {
+        padding: 28px;
+      }
+
+      .material-card h3,
+      .review-card h3,
+      .stat-card strong {
+        margin: 0;
+        color: #111111;
+      }
+
+      .material-card h3 {
+        font-size: 24px;
+        line-height: 1.3;
+      }
+
+      .material-card .role,
+      .review-card .role,
+      .contact-note {
+        display: inline-block;
+        margin-bottom: 14px;
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        color: #9a9a9a;
+      }
+
+      .material-card p,
+      .review-card p,
+      .case-copy p,
+      .contact-copy p {
+        margin: 14px 0 0;
+        font-size: 16px;
+        line-height: 1.85;
+        color: #555555;
+      }
+
+      .material-sample {
+        margin-top: 18px;
+      }
+
+      .material-sample span {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 12px;
+        letter-spacing: 0.16em;
+        color: #8d8d8d;
+      }
+
+      .material-sample-box {
+        width: 100%;
+        max-width: 220px;
+        aspect-ratio: 1 / 1;
+        border: 1px solid #dddddd;
+        background: linear-gradient(145deg, #f2f2f2 0%, #d9d9d9 45%, #c4c4c4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: #777777;
+      }
+
+      .case-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .case-card {
+        border: 1px solid #e5e5e5;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      .case-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: #e5e5e5;
+      }
+
+      .case-photo {
+        min-height: 220px;
+        background: #f6f6f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        color: #9b9b9b;
+      }
+
+      .case-copy {
+        padding: 22px 24px 24px;
+      }
+
+      .case-copy h3 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.3;
+      }
+
+      .case-tag {
+        display: inline-block;
+        margin-bottom: 12px;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        color: #8d8d8d;
+      }
+
+      .review-card .stars {
+        margin-bottom: 14px;
+        font-size: 18px;
+        letter-spacing: 0.12em;
+        color: #111111;
+      }
+
+      .review-card .capture {
+        margin-bottom: 18px;
+        border: 1px solid #ececec;
+        background: #fafafa;
+        padding: 18px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #666666;
+      }
+
+      .review-card h3 {
+        font-size: 22px;
+        line-height: 1.45;
+      }
+
+      .review-card p {
+        margin-top: 12px;
+      }
+
+      .stat-card {
+        padding: 34px 24px;
+        text-align: center;
+      }
+
+      .stat-card strong {
+        display: block;
+        font-size: clamp(32px, 3vw, 44px);
+        line-height: 1.1;
+      }
+
+      .stat-card span {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        letter-spacing: 0.18em;
+        color: #8d8d8d;
+      }
+
+      .stat-card p {
+        margin: 16px 0 0;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #555555;
+      }
+
+      .contact-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+      }
+
+      .contact-copy {
+        padding-right: 10px;
+      }
+
+      .contact-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+
+      .contact-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 150px;
+        padding: 14px 20px;
+        border: 1px solid #111111;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .contact-btn.secondary {
+        border-color: #d8d8d8;
+        color: #333333;
+      }
+
+      .contact-box .label {
+        margin: 0 0 10px;
+        font-size: 13px;
+        color: #888888;
+      }
+
+      .contact-box .value {
+        margin: 0 0 22px;
+        font-size: 18px;
+        color: #111111;
+      }
+
+      .footer {
+        padding: 28px 0 36px;
+        color: #777777;
+        font-size: 13px;
+      }
+
+      @media (max-width: 960px) {
+        .nav,
+        .two-col,
+        .feature-grid,
+        .effect-grid,
+        .contact-layout,
+        .material-grid,
+        .review-grid,
+        .stats-grid,
+        .case-grid {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        .header-inner {
+          display: block;
+        }
+
+        .nav {
+          margin-top: 16px;
+          gap: 14px;
+        }
+
+        .hero-slider {
+          height: 74vh;
+          min-height: 560px;
+        }
+
+        .copy {
+          left: 6%;
+          right: 6%;
+          width: min(480px, 78%);
+        }
+
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .gallery-grid .wide,
+        .gallery-grid .small {
+          grid-column: auto;
+        }
+
+        .case-photo {
+          min-height: 180px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .wrap {
+          padding: 0 16px;
+        }
+
+        .hero .wrap {
+          padding: 0 8px;
+        }
+
+        .brand {
+          font-size: 24px;
+        }
+
+        .hero {
+          padding-top: 8px;
+        }
+
+        .hero-slider {
+          min-height: 520px;
+          height: 68vh;
+        }
+
+        .copy h1,
+        .copy h2 {
+          font-size: 28px;
+        }
+
+        .copy p {
+          font-size: 12px;
+        }
+
+        .effect-card img {
+          height: 260px;
+        }
+
+        .dot {
+          width: 28px;
+        }
+
+        .control-btn {
+          width: 42px;
+          height: 42px;
+        }
+
+        .section {
+          padding: 70px 0;
+        }
+      }
+    
+/* ===== COLOR SYSTEM FINAL FIX ===== */
+.image-box { position: relative; }
+
+.image-box img {
+  width: 100%;
+  display: block;
+}
+
+.system-intro {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.system-intro h2 {
+  margin: 0 0 12px;
+}
+
+.system-intro p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
+}
+
+/* Step */
+.color-overlay {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+}
+
+.text-step {
+  position: absolute;
+  width: 30%;
+  text-align: center;
+  color: #333;
+  font-weight: 500;
+}
+
+.step1 { left: 0; }
+.step2 { left: 35%; }
+.step3 { right: 0; }
+
+.step-num {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #555;
+}
+
+.text-step h3 {
+  margin: 6px 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.text-step p {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+/* 모바일: 카드형으로 아래 */
+@media (max-width: 768px) {
+
+  .color-overlay {
+    position: static;
+    transform: none;
+    margin-top: 20px;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .text-step {
+    position: static;
+    width: 100%;
+
+    background: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+}
+
+</style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <div class="wrap header-inner">
+          <div class="brand">COZY 줄눈</div>
+          <nav class="nav">
+            <a href="#system">색상 추천</a>
+            <a href="#about">줄눈 재료</a>
+            <a href="#service">시공 사례</a>
+            <a href="#review">고객 후기</a>
+            <a href="#contact">상담 문의</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="wrap">
+            <div class="hero-slider" id="heroSlider">
+              <div class="slide active">
+                <img
+                  src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/main_living.png"
+                  alt="거실 줄눈 시공 이미지"
+                />
+                <div class="overlay"></div>
+                <div class="copy">
+                  <h1>당신의 공간을<br />아늑하게 완성합니다</h1>
+                  <p>COZY 줄눈 - 깨끗하고 따뜻한 줄눈 시공 전문</p>
+                </div>
+              </div>
+
+              <div class="slide">
+                <img
+                  src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/bath2.png"
+                  alt="욕실 줄눈 시공 이미지"
+                />
+                <div class="overlay"></div>
+                <div class="copy">
+                  <h2>사전 색상 시뮬레이션으로<br />공간의 조화를 미리 확인</h2>
+                  <p>사진 한장이면 시공 전 어울리는 색상을 확인할 수 있습니다</p>
+                </div>
+              </div>
+
+              <div class="slide">
+                <img
+                  src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/main_kit.png"
+                  alt="주방 줄눈 시공 이미지"
+                />
+                <div class="overlay"></div>
+                <div class="copy">
+                  <h2>주방 타일,<br />깔끔하게 새로워지다</h2>
+                  <p>친환경 소재로 시공합니다</p>
+                </div>
+              </div>
+
+              <div class="slider-ui">
+                <div class="dots">
+                  <button class="dot active" type="button" aria-label="첫 번째 슬라이드"></button>
+                  <button class="dot" type="button" aria-label="두 번째 슬라이드"></button>
+                  <button class="dot" type="button" aria-label="세 번째 슬라이드"></button>
+                </div>
+                <div class="controls">
+                  <button class="control-btn" type="button" id="prevBtn" aria-label="이전 슬라이드">
+                    &#10094;
+                  </button>
+                  <button class="control-btn" type="button" id="nextBtn" aria-label="다음 슬라이드">
+                    &#10095;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="effect-section">
+          <div class="wrap">
+            <div class="eyebrow">WHY COZY</div>
+            <h2 style="margin: 18px 0 34px; font-size: clamp(32px, 3vw, 42px); line-height: 1.2; font-weight: 700;">
+              COZY 줄눈의 효과
+            </h2>
+            <div class="effect-grid">
+              <div class="effect-card">
+                <img
+                  src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/bath_why.png"
+                  alt="욕실 줄눈 시공 효과"
+                />
+                <div class="effect-copy">
+                  <h3>욕실 줄눈 시공</h3>
+                  <p>곰팡이 방지 특수 소재로
+깨끗하고 위생적인 욕실을 만듭니다</p>
+                </div>
+              </div>
+              <div class="effect-card">
+                <img
+                  src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/kit_why.png"
+                  alt="주방 줄눈 시공 효과"
+                />
+                <div class="effect-copy">
+                  <h3>주방 줄눈 시공</h3>
+                  <p>기름때와 오염에 강한 소재로
+주방을 항상 깔끔하게 유지합니다</p>
+                </div>
+              </div>
+              <div class="effect-card">
+                <img
+                  src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/living%20why.png"
+                  alt="거실 줄눈 시공 효과"
+                />
+                <div class="effect-copy">
+                  <h3>거실 줄눈 시공</h3>
+                  <p>넓은 공간도 균일하고 깔끔하게
+꼼꼼한 마감을 제공합니다</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+<section class="section" id="system">
+  <div class="wrap" style="max-width:1000px;">
+
+    <div class="system-intro">
+      <h2>COZY 줄눈 색상 추천 시스템</h2>
+      <p>사진을 바탕으로 타일 색상을 분석하고 어울리는 줄눈 컬러를 추천해드립니다.</p>
+    </div>
+
+    <div class="image-box">
+      <img src="https://raw.githubusercontent.com/88niceboy/cozy-homecare/main/cozy_system.png" />
+
+      <div class="color-overlay">
+        <div class="text-step step1">
+          <div class="step-num">STEP 01</div>
+          <h3>사진 입력</h3>
+          <p>고객님이 보내주신 사진 입력<br>사진이 없을 경우 별도 안내드립니다</p>
+        </div>
+
+        <div class="text-step step2">
+          <div class="step-num">STEP 02</div>
+          <h3>타일 색상 추출</h3>
+          <p>타일 색을 분석해<br>어울리는 줄눈 색상 매칭</p>
+        </div>
+
+        <div class="text-step step3">
+          <div class="step-num">STEP 03</div>
+          <h3>줄눈 색상 추천</h3>
+          <p>5가지 줄눈 색상 추천<br>현장에서도 줄눈 샘플로 직접 확인</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="about">
+          <div class="wrap">
+            <div class="eyebrow">MATERIAL</div>
+            <h2>줄눈 재료 선택부터 전문적으로 안내합니다</h2>
+            <div class="material-grid">
+              <div class="material-card">
+                <span class="role">POLYUREA</span>
+                <h3>폴리우레아</h3>
+                <p>탄성이 있어 미세한 움직임이나 충격에 비교적 유연하게 대응하고, 건조와 경화가 빠른 편이라 일상 공간 시공에 많이 사용됩니다. 유광 느낌으로 마감되어 또렷하고 선명한 인상을 주는 점도 장점입니다.</p>
+                <div class="material-sample">
+                  <span>SILVER SAMPLE</span>
+                  <div class="material-sample-box">IMAGE</div>
+                </div>
+              </div>
+              <div class="material-card">
+                <span class="role">EPOXY</span>
+                <h3>에폭시 계열(케라폭시, 아스팍톤)</h3>
+                <p>에폭시 계열(케라폭시, 아스팍톤)은 내수성과 내오염성이 뛰어나 욕실과 현관처럼 관리가 중요한 공간에 적합합니다. 무광에 가까운 질감으로 차분하고 고급스러운 분위기를 연출하기 좋고, 시공 단가는 높을 수 있지만 오염과 변색에 강해 장기적으로 깔끔한 상태를 유지하기 좋습니다.</p>
+                <div class="material-sample">
+                  <span>SILVER SAMPLE</span>
+                  <div class="material-sample-box">IMAGE</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="service">
+          <div class="wrap">
+            <div class="eyebrow">BEFORE / AFTER</div>
+            <h2>공간별 시공 결과를 전후 비교로 확인하실 수 있습니다</h2>
+            <div class="case-grid">
+              <div class="case-card">
+                <div class="case-visual">
+                  <div class="case-photo">BEFORE</div>
+                  <div class="case-photo">AFTER</div>
+                </div>
+                <div class="case-copy">
+                  <span class="case-tag">BATHROOM</span>
+                  <h3>욕실 시공 사례</h3>
+                  <p>줄눈 오염과 변색이 보이던 욕실도 시공 후 훨씬 밝고 정돈된 인상으로 바뀝니다.</p>
+                </div>
+              </div>
+              <div class="case-card">
+                <div class="case-visual">
+                  <div class="case-photo">BEFORE</div>
+                  <div class="case-photo">AFTER</div>
+                </div>
+                <div class="case-copy">
+                  <span class="case-tag">KITCHEN</span>
+                  <h3>주방 시공 사례</h3>
+                  <p>기름때와 생활 오염이 많은 주방은 타일 라인이 정리되면서 전체 분위기가 깔끔해집니다.</p>
+                </div>
+              </div>
+              <div class="case-card">
+                <div class="case-visual">
+                  <div class="case-photo">BEFORE</div>
+                  <div class="case-photo">AFTER</div>
+                </div>
+                <div class="case-copy">
+                  <span class="case-tag">ENTRANCE</span>
+                  <h3>현관 시공 사례</h3>
+                  <p>첫인상을 좌우하는 현관은 작은 변화만으로도 공간 전체가 더 깨끗하고 선명하게 보입니다.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <div class="wrap">
+            <div class="eyebrow">REVIEW</div>
+            <h2>고객이 직접 남긴 반응이 가장 큰 신뢰가 됩니다</h2>
+            <div class="review-grid">
+              <div class="review-card">
+                <div class="capture">카카오톡 후기 캡쳐 영역<br>실제 후기 이미지를 넣으면 더 자연스럽습니다</div>
+                <div class="stars">★★★★★</div>
+                <h3>"색상 추천 받고 했는데 너무 만족해요!"</h3>
+                <p>상담부터 시공까지 흐름이 매끄럽고, 추천받은 색상이 실제 공간과 잘 어울렸다는 후기를 강조하는 카드입니다.</p>
+              </div>
+              <div class="review-card">
+                <div class="capture">카카오톡 후기 캡쳐 영역<br>짧고 진짜 같은 말투가 가장 좋습니다</div>
+                <div class="stars">★★★★★</div>
+                <h3>"집이 훨씬 깔끔해졌어요"</h3>
+                <p>전후 차이가 확실하게 느껴졌다는 후기를 넣으면 사진 섹션과 연결되면서 설득력이 더 강해집니다.</p>
+              </div>
+              <div class="review-card">
+                <div class="capture">카카오톡 후기 캡쳐 영역<br>실제 고객명 일부 가림 처리도 자연스럽습니다</div>
+                <div class="stars">★★★★★</div>
+                <h3>"사장님 꼼꼼하세요"</h3>
+                <p>작업 태도와 마감 완성도에 대한 언급은 가격 정당화와 재문의 의사까지 함께 전달해줍니다.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!--
+        <section class="section" id="gallery">
+          <div class="wrap">
+            <div class="eyebrow">DATA</div>
+            <h2>수치로도 확인되는 시공 경험과 만족도</h2>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <strong>127건</strong>
+                <span>누적 시공</span>
+                <p>다양한 공간과 타일 조건을 경험하며 쌓아온 실제 시공 데이터입니다.</p>
+              </div>
+              <div class="stat-card">
+                <strong>3,200m²</strong>
+                <span>시공 면적</span>
+                <p>소형 욕실부터 넓은 공간까지 꾸준히 작업해온 누적 면적 기준입니다.</p>
+              </div>
+              <div class="stat-card">
+                <strong>98%</strong>
+                <span>고객 만족도</span>
+                <p>재문의와 소개가 이어질 만큼 결과 만족도가 높다는 점을 숫자로 보여줍니다.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        -->
+
+        <section class="section" id="contact" style="border-bottom:0;">
+          <div class="wrap contact-layout">
+            <div class="contact-copy">
+              <div class="eyebrow">CONTACT</div>
+              <h2 style="margin-bottom:20px;">상담 후 공간에 맞는 줄눈 색상을 안내해드립니다</h2>
+              <p>전화 상담, 카카오톡 문의, 간단한 상담 접수까지 편한 방식으로 연락주시면 됩니다. 사진만 보내주셔도 공간 분위기에 맞는 방향을 먼저 설명해드립니다.</p>
+              <div class="contact-actions">
+                <a class="contact-btn" href="tel:010-0000-0000">전화 상담</a>
+                <a class="contact-btn secondary" href="#">카톡 상담</a>
+                <a class="contact-btn secondary" href="#">간단 문의</a>
+              </div>
+            </div>
+            <div class="contact-box">
+              <p class="label">상담 가능 시간</p>
+              <p class="value">평일 09:00 - 19:00</p>
+              <p class="label">카카오톡</p>
+              <p class="value">@cozy</p>
+              <p class="label">PHONE</p>
+              <p class="value">010-0000-0000</p>
+              <p class="label">안내 문구</p>
+              <p class="value">사진 전달 시 더 빠른 상담이 가능합니다</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="wrap">COZY 줄눈</div>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var slides = document.querySelectorAll(".slide");
+        var dots = document.querySelectorAll(".dot");
+        var prevBtn = document.getElementById("prevBtn");
+        var nextBtn = document.getElementById("nextBtn");
+        var current = 0;
+        var timer = null;
+
+        function showSlide(index) {
+          if (index < 0) {
+            index = slides.length - 1;
+          }
+          if (index >= slides.length) {
+            index = 0;
+          }
+
+          slides[current].classList.remove("active");
+          dots[current].classList.remove("active");
+
+          current = index;
+
+          slides[current].classList.add("active");
+          dots[current].classList.add("active");
+        }
+
+        function nextSlide() {
+          showSlide(current + 1);
+        }
+
+        function resetTimer() {
+          clearInterval(timer);
+          timer = setInterval(nextSlide, 4500);
+        }
+
+        prevBtn.addEventListener("click", function () {
+          showSlide(current - 1);
+          resetTimer();
+        });
+
+        nextBtn.addEventListener("click", function () {
+          nextSlide();
+          resetTimer();
+        });
+
+        dots.forEach(function (dot, index) {
+          dot.addEventListener("click", function () {
+            showSlide(index);
+            resetTimer();
+          });
+        });
+
+        resetTimer();
+      })();
+    </script>
+  </body>
+</html>
